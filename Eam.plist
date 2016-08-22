@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>items</key>
 	<array>
 		<dict>
@@ -11,19 +16,19 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>http://eam.nm139.com/eamas/app/Eam.ipa</string>
+					<string>http://192.168.191.1/TestWeb/Eam.ipa</string>
 				</dict>
 				<dict>
 					<key>kind</key>
 					<string>display-image</string>
 					<key>url</key>
-					<string>http://eam.nm139.com/eamas/app/images/image.57x57.png</string>
+					<string>http://192.168.191.1/TestWeb/image.57x57.png</string>
 				</dict>
 				<dict>
 					<key>kind</key>
 					<string>full-size-image</string>
 					<key>url</key>
-					<string>http://eam.nm139.com/eamas/app/images/image.512x512.png</string>
+					<string>http://192.168.191.1/TestWeb/image.512x512.png</string>
 				</dict>
 			</array>
 			<key>metadata</key>
@@ -31,7 +36,7 @@
 				<key>bundle-identifier</key>
 				<string>com.eam.cmcc</string>
 				<key>bundle-version</key>
-				<string>1.0.0</string>
+				<string>1.0.1</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
