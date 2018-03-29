@@ -1,2 +1,2 @@
 # crazythq.github.com
-personal website
+welcome to visit my personal website: http://crazythq.github.io/
