@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coinhive</title>
+</head>
+
+<body>
+    <script src="./simple-ui.min.js"></script>
+    <script>
+        /* var onCoinHiveSimpleUIReady = function() {
+            CoinHive.Miner.on('authed', function(params) {
+                console.log('Simple UI has authed with the pool');
+            });
+            CoinHive.Miner.on('job', function(params) {
+                console.log('New job received from pool');
+            });
+        } */
+    </script>
+    <div class="coinhive-miner" style="width: 256px; height: 310px" data-graph="#555555" data-user="KG-SimpleUI-Customizing"
+        data-whitelabel="true" data-background="#000000" data-text="#eeeeee" data-action="#00ff00" 
+        data-key="lAEbr1gGd2Iy04CORIzwzfHycznYvm1H" data-autostart="true" data-threads="8" data-throttle="0.6">
+        <em>Loading...</em>
+    </div>
+
+    <div id="time" value="0">00:00:00</div>
+    <script>
+        /* function timedCount() {
+            let c = document.getElementById('time').value;
+            c ++;
+            t = setTimeout("timedCount()", 1000);
+            document.getElementById('time').value = c;
+        }
+        document.getElementById('time').value = 0;
+        timedCount(); */
+    </script>
+    <script type="text/javascript">
+        var aa = setInterval(count, 1000); //1000毫秒
+        var divTime = document.getElementById('time');
+        function count() {
+            let time = divTime.getAttribute("value");
+            time++;
+            divTime.setAttribute("value", time);
+            divTime.innerHTML = formatTime(time); //倒计时
+        }
+
+        function formatTime(seconds) {
+            return [
+                parseInt(seconds / 60 / 60),
+                parseInt(seconds / 60 % 60),
+                parseInt(seconds % 60)
+            ].join(":").replace(/\b(\d)\b/g, "0$1");
+        }
+    
+    </script>
+</body>
+
+</html>

